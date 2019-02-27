@@ -17,7 +17,7 @@ export default class FetchComponent extends React.Component {
     			todoDataSource: ds,
     			tempDataSource: '',
     			error: '',
-    			visibility: 0,
+    			color: "#119bd0",
     		}
   }
 
@@ -29,7 +29,7 @@ export default class FetchComponent extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
       	var resCode = responseJson.cod;
-
+      	var currentTemp = 0;
       	if (resCode == 200){
       		var arrTemp = [];
 	        console.log(responseJson.weather)
@@ -43,7 +43,23 @@ export default class FetchComponent extends React.Component {
 	          error: ''
 	        }, function(){
 
-	        });
+	        }),
+
+	        console.log("printing from array temp" , arrTemp[0].temp)
+	        if ( arrTemp[0].temp < 9){
+	        	this.setState({
+	        		color: "#0ea5a1"
+	        	});
+	        }else if ( 9 <= arrTemp[0].temp && arrTemp[0].temp <= 22){
+	        	this.setState({
+	        		color: "#B98300"
+	        	});
+	        }else if (22 < arrTemp[0].temp){
+	        	console.log("color greater than 23")
+	        	this.setState({
+	        		color: "#ec5c1d"
+	        	});
+	        }
 	     }else{
 	     	this.setState({
 	          error: "please enter a valid city name ",
@@ -61,7 +77,7 @@ export default class FetchComponent extends React.Component {
 
     	<View>
            <LinearGradient
-            colors={["#1D9595", "white"]}
+            colors={[this.state.color, "white"]}
             style={{
               position: 'absolute',
               left: 0,
